@@ -16,21 +16,23 @@ namespace Turkey.Tests
             const int GrandChildAgeSeconds = 3 * WaitTimeoutSeconds;
 
             string filename = Path.GetTempFileName();
+            File.Copy(filename, "test.tmp");
+            string path = "test.tmp";
             try
             {
                 // This script creates a 'sleep' grandchild that outlives its parent.
-                File.WriteAllText(filename,
+                File.WriteAllText(path,
 $@"#!/bin/bash
 
 sleep {GrandChildAgeSeconds} &
 ");
-                Process chmodProcess = Process.Start("chmod", $"+x {filename}");
+                Process chmodProcess = Process.Start("chmod", $"+x {path}");
                 chmodProcess.WaitForExit();
                 Assert.Equal(0, chmodProcess.ExitCode);
 
                 var psi = new ProcessStartInfo()
                 {
-                    FileName = filename,
+                    FileName = path,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };
@@ -44,6 +46,7 @@ sleep {GrandChildAgeSeconds} &
             }
             finally
             {
+                File.Delete(path);
                 File.Delete(filename);
             }
         }

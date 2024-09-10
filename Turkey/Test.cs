@@ -75,22 +75,11 @@ namespace Turkey
 
         private void UpdateProjectFilesIfPresent()
         {
-            if (SystemUnderTest.RuntimeVersion < Version.Parse("2.0"))
+            var csprojFile = $"{Directory.Name}.csproj";
+            var csprojPath = Path.Combine(this.Directory.FullName, csprojFile);
+            if (File.Exists(csprojPath))
             {
-                var projectJsonPath = Path.Combine(this.Directory.FullName, "project.json");
-                if (File.Exists(projectJsonPath))
-                {
-                    CopyProjectJsonFile();
-                }
-            }
-            else
-            {
-                var csprojFile = $"{Directory.Name}.csproj";
-                var csprojPath = Path.Combine(this.Directory.FullName, csprojFile);
-                if (File.Exists(csprojPath))
-                {
-                    UpdateCsprojVersion(csprojPath);
-                }
+                UpdateCsprojVersion(csprojPath);
             }
         }
 
