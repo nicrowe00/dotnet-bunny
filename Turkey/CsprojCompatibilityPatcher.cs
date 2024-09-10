@@ -14,15 +14,8 @@ namespace Turkey
         {
             var pattern = @"<TargetFramework>net(?:coreapp)?\d\.\d+</TargetFramework>";
             var versionString = newRuntime.MajorMinor;
-            string replacement = null;
-            if (newRuntime.Major < 4)
-            {
-                replacement = $"<TargetFramework>netcoreapp{versionString}</TargetFramework>";
-            }
-            else
-            {
-                replacement = $"<TargetFramework>net{versionString}</TargetFramework>";
-            }
+            var replacement = $"<TargetFramework>net{versionString}</TargetFramework>";
+            
             var output = Regex.Replace(originalCsprojContents, pattern, replacement);
 
             return output;
